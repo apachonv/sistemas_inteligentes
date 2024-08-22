@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-# Problema de la mochila
+# Problema de la mochila - ELITISMO
 # Objeto1 -> utilidad=4 y peso=7
 # Objeto2 -> utilidad=5 y peso=6
 # Objeto3 -> utilidad=6 y peso=8
@@ -10,6 +10,7 @@ import numpy as np
 # Z=(4*X1)+(5*X2)+(6*X3)+(3*X4)
 # RESTRICCIÓN -> (7*X1)+(6*X2)+(8*X3)+(2*X4)<=15
 # https://docs.google.com/spreadsheets/d/1gVMwvzvU1HZwD1VS_HIlfVl3fy6YwQpIKa1zZRdFYjI/edit?gid=0#gid=0
+
 
 def evalua(n,x,poblIt,utilidad):
     suma=0
@@ -62,6 +63,7 @@ def cruce(a1,p1,p2,x):
     if a1<Pcruce:
       print("Mas grande", Pcruce, "que ", a1, "-> Si Cruzan")
        
+      '''punto de corte creado por alejandra'''
       corte=np.random.randint(1,x)
       #corte = 1
       print('corte:',corte)
@@ -115,8 +117,8 @@ def soluciónFinal(poblIt, pesosFinales, utilidad):
 #### Parametros - variables globales #####
 
 x=4  #numero de variables de decision - Elementos diferentes: x
-n=4  #numero de individuos en la poblacion - cromosomas: n
-Pcruce=0.98  #Probabilidad de Cruce
+n=5  #numero de individuos en la poblacion - cromosomas: n
+Pcruce=0.8  #Probabilidad de Cruce
 Pmuta=0.1   #Probabilidad de Mutación
 
 fitness= np.empty((n))
@@ -129,13 +131,15 @@ pesoF= np.empty((n))
 probabilidad = np.empty((n))  
 
 '''poblacion inicial de alejandra'''
-cromosoma1 = [1, 1, 0, 0]
-cromosoma2 = [1, 1, 0, 1]
-cromosoma3 = [0, 0, 0, 0]
-cromosoma4 = [1, 0, 0, 1]
-poblInicial = np.array([cromosoma1, cromosoma2, cromosoma3, cromosoma4])
-pesos = [7, 6, 8, 2] #son los de las funciones, es decir los valores que van a maultiplicar
-utilidad = [4, 5, 6, 3] #son los de las funciones, es decir los valores que van a maultiplicar
+cromosoma1 = [0, 0, 0, 0]
+cromosoma2 = [0, 1, 1, 1]
+cromosoma3 = [0, 0, 1, 1]
+cromosoma4 = [1, 0, 1, 0]
+cromosoma5 = [1, 0, 1, 0]
+
+poblInicial = np.array([cromosoma1, cromosoma2, cromosoma3, cromosoma4, cromosoma5])
+pesos = [409, 1718, 2000, 2008] #son los de las funciones, es decir los valores que van a maultiplicar
+utilidad = [41130, 42100, 24000, 24200] #son los de las funciones, es decir los valores que van a maultiplicar
 
 print("Poblacion inicial:","\n", poblInicial)
 print("Utilidad:", utilidad) 
@@ -149,7 +153,7 @@ poblIt=poblInicial
 
 '''Creado por alejandra, ciclo for y aglomerar los llamados de las funciones en él'''
 #numero de iteraciones, ingresar en el for la cantidad deseada
-for i in range(10):
+for i in range(1):
     print("\nIteración : ", i+1)
 
     #Llama función evalua, para calcular el fitness de cada individuo
@@ -160,14 +164,18 @@ for i in range(10):
     pesoF = calcularPeso(n,x,poblIt,pesos)
 
     #imprime la tabla de la iteracion
+    '''modificado por alejandra, con el nuevo parámetro pesoF'''
     imprime(n,total,fitness,pesoF,poblIt)
 
+    '''creado por alejandra el vector, mpdificado por aleja el ciclo while'''
     hijos = []
     contador=0
     iter = 1
     while (contador<n):
-        print("\nIteración: ", iter)
+        print("\nIteración para creación de los hijos: ", iter)
 
+        '''modificado por alejandra, el parametro'''
+        '''el numero que pasa como parametro, es igual al del ejercicio en exel con fines de ver los resultados'''
         #papa1=seleccion(acumulado,0.96036) # Padre 1
         papa1=seleccion(acumulado) # Padre 1
         print("padre 1:", papa1)
@@ -175,11 +183,13 @@ for i in range(10):
         papa2=seleccion(acumulado) # Padre 2
         print("padre 2:", papa2)
 
+        '''modificado por alejandra, primer y ultimo parámetro'''
         #hijoA,hijoB=cruce(0.52676,papa1,papa2,x)
         hijoA,hijoB=cruce(np.random.rand(),papa1,papa2,x)
         print("hijo1: ", hijoA)
         print("hijo2: ", hijoB)
 
+        '''creado por aleja'''
         hijo1=mutacion(hijoA,x)
         hijo2=mutacion(hijoB,x)
         pesoHijo1=pesoHijo(hijo1,x)
@@ -196,7 +206,6 @@ for i in range(10):
             contador+=1
 
         iter+=1
-
     poblIt = np.array(hijos)
     print('\nNueva generación: \n',poblIt)
 
